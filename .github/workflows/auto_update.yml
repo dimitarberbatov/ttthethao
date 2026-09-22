@@ -2,19 +2,22 @@ name: Auto Update M3U Playlist
 
 on:
   schedule:
-    # Lịch chạy tự động mỗi 30 phút một lần
     - cron: '*/30 * * * *'
-  workflow_dispatch: # Nút hỗ trợ chạy thủ công
+  workflow_dispatch:
+
+# Cấp quyền ghi trực tiếp cho Workflow
+permissions:
+  contents: write
 
 jobs:
   update-playlist:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: '3.x'
 
