@@ -1,0 +1,29 @@
+name: Auto Update M3U Playlist
+
+on:
+  schedule:
+    # Lịch chạy tự động mỗi 30 phút một lần
+    - cron: '*/30 * * * *'
+  workflow_dispatch: # Nút hỗ trợ chạy thủ công
+
+jobs:
+  update-playlist:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+
+      - name: Run update script
+        run: python update.py
+
+      - name: Commit and push changes
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add playlist.m3u
+          git diff --quiet && git diff --staged --quiet || (git commit -m "Auto update playlist [skip ci]" && git push)
